@@ -1,6 +1,8 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
 
 type AppShellProps = {
@@ -8,6 +10,8 @@ type AppShellProps = {
 };
 
 export function AppShell({ children }: AppShellProps) {
+  const pathname = usePathname();
+
   async function handleLogout() {
     await fetch("/api/auth/logout", { method: "POST" });
     window.location.href = "/login";
@@ -24,13 +28,35 @@ export function AppShell({ children }: AppShellProps) {
               <p className="text-xs text-clinic-muted">Internal quotation workspace</p>
             </div>
           </div>
-          <button
-            type="button"
-            onClick={handleLogout}
-            className="rounded-full border border-clinic-line px-4 py-2 text-sm font-semibold text-clinic-ink transition hover:border-clinic-teal hover:text-clinic-teal"
-          >
-            Sign out
-          </button>
+          <div className="flex items-center gap-2">
+            <Link
+              href="/"
+              className={
+                pathname === "/"
+                  ? "rounded-full bg-clinic-soft px-4 py-2 text-sm font-semibold text-clinic-teal"
+                  : "rounded-full border border-clinic-line px-4 py-2 text-sm font-semibold text-clinic-ink transition hover:border-clinic-teal hover:text-clinic-teal"
+              }
+            >
+              Builder
+            </Link>
+            <Link
+              href="/admin/services"
+              className={
+                pathname.startsWith("/admin")
+                  ? "rounded-full bg-clinic-soft px-4 py-2 text-sm font-semibold text-clinic-teal"
+                  : "rounded-full border border-clinic-line px-4 py-2 text-sm font-semibold text-clinic-ink transition hover:border-clinic-teal hover:text-clinic-teal"
+              }
+            >
+              Services
+            </Link>
+            <button
+              type="button"
+              onClick={handleLogout}
+              className="rounded-full border border-clinic-line px-4 py-2 text-sm font-semibold text-clinic-ink transition hover:border-clinic-teal hover:text-clinic-teal"
+            >
+              Sign out
+            </button>
+          </div>
         </div>
       </header>
       {children}

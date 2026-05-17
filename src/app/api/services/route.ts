@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
-import { getServices } from "@/lib/db";
+import { listServiceTemplates } from "@/lib/serviceRepository";
 
 export async function GET() {
-  return NextResponse.json({ services: getServices() });
+  const { services, source } = await listServiceTemplates();
+
+  return NextResponse.json({ services, source });
 }

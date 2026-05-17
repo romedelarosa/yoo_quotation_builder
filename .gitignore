@@ -4,5 +4,6 @@ out/
 dist/
 coverage/
 *.tsbuildinfo
+qa-*.png
 .env*.local
 .vercel/

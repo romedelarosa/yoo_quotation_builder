@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
-import { getServiceById, listQuotes, saveQuote } from "@/lib/db";
+import { listQuotes, saveQuote } from "@/lib/db";
 import { calculateBalance, calculateFinalPrice } from "@/lib/pricing";
+import { findServiceTemplateById } from "@/lib/serviceRepository";
 
 export async function GET() {
   return NextResponse.json({ quotes: listQuotes() });
@@ -18,14 +19,15 @@ export async function POST(request: Request) {
     customNotes?: string;
   };
 
-  if (!body.serviceId || !getServiceById(body.serviceId)) {
+  const service = body.serviceId ? await findServiceTemplateById(body.serviceId) : undefined;
+
+  if (!body.serviceId || !service) {
     return NextResponse.json({ error: "A valid service is required." }, { status: 400 });
   }
 
-  const service = getServiceById(body.serviceId);
   const discountAmount = Number(body.discountAmount || 0);
   const downPayment = Number(body.downPayment || 0);
-  const finalPackagePrice = calculateFinalPrice(service?.regularPrice || 0, discountAmount);
+  const finalPackagePrice = calculateFinalPrice(service.regularPrice, discountAmount);
   const remainingBalance = calculateBalance(finalPackagePrice, downPayment);
 
   const savedQuote = saveQuote({

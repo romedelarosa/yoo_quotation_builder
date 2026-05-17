@@ -23,13 +23,21 @@ export async function saveQuoteAsOnePagePdf(quote: QuoteDraft, serviceName: stri
   const html2canvas = html2canvasModule.default;
 
   await document.fonts.ready;
+  element.classList.add("pdf-export-mode");
+  await new Promise((resolve) => requestAnimationFrame(resolve));
 
-  const canvas = await html2canvas(element, {
-    backgroundColor: "#ffffff",
-    scale: 2,
-    useCORS: true,
-    windowWidth: Math.max(element.scrollWidth, 900)
-  });
+  let canvas: HTMLCanvasElement;
+
+  try {
+    canvas = await html2canvas(element, {
+      backgroundColor: "#ffffff",
+      scale: 2,
+      useCORS: true,
+      windowWidth: Math.max(element.scrollWidth, 960)
+    });
+  } finally {
+    element.classList.remove("pdf-export-mode");
+  }
 
   const pdf = new jsPDF({
     orientation: "portrait",

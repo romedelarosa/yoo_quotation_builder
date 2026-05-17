@@ -9,6 +9,10 @@ export type ServiceTemplate = {
   standardNotes: string[];
   disclaimer: string;
   paymentMethodNotes: string;
+  isActive?: boolean;
+  sortOrder?: number;
+  createdAt?: string;
+  updatedAt?: string;
 };
 
 export type QuoteDraft = {

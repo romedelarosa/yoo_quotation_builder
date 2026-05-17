@@ -1,15 +1,6 @@
-import { serviceTemplates } from "@/data/services";
-import type { SavedQuote, ServiceTemplate } from "@/types/quote";
+import type { SavedQuote } from "@/types/quote";
 
 const quoteStore: SavedQuote[] = [];
-
-export function getServices(): ServiceTemplate[] {
-  return serviceTemplates;
-}
-
-export function getServiceById(serviceId: string): ServiceTemplate | undefined {
-  return serviceTemplates.find((service) => service.id === serviceId);
-}
 
 export function saveQuote(quote: Omit<SavedQuote, "id" | "createdAt">): SavedQuote {
   const savedQuote: SavedQuote = {
@@ -23,5 +14,5 @@ export function saveQuote(quote: Omit<SavedQuote, "id" | "createdAt">): SavedQuo
 }
 
 export function listQuotes(): SavedQuote[] {
-  return quoteStore;
+  return [...quoteStore];
 }

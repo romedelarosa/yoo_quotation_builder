@@ -32,6 +32,39 @@ textarea {
   display: none;
 }
 
+.pdf-export-mode {
+  width: 960px !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+.pdf-export-mode .quote-header {
+  grid-template-columns: minmax(0, 1fr) auto !important;
+}
+
+.pdf-export-mode .quote-logo {
+  width: 118px !important;
+}
+
+.pdf-export-mode .quote-date {
+  align-self: start !important;
+}
+
+.pdf-export-mode h1 {
+  font-size: 22px !important;
+  line-height: 1.2 !important;
+}
+
+.pdf-export-mode h2,
+.pdf-export-mode h3 {
+  line-height: 1.2 !important;
+}
+
+.pdf-export-mode section,
+.pdf-export-mode .grid {
+  row-gap: 10px !important;
+}
+
 @page {
   size: A4;
   margin: 10mm;

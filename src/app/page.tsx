@@ -5,10 +5,11 @@ import { AppShell } from "@/components/AppShell";
 import { ConditionalItemsChecklist } from "@/components/ConditionalItemsChecklist";
 import { InclusionChecklist } from "@/components/InclusionChecklist";
 import { PrintableQuote } from "@/components/PrintableQuote";
+import { QuoteHistory, quoteDraftFromSavedQuote } from "@/components/QuoteHistory";
 import { QuoteForm } from "@/components/QuoteForm";
 import { saveQuoteAsOnePagePdf } from "@/lib/pdf";
 import { calculateBalance, calculateFinalPrice } from "@/lib/pricing";
-import type { QuoteDraft, ServiceTemplate } from "@/types/quote";
+import type { QuoteDraft, SavedQuote, ServiceTemplate } from "@/types/quote";
 
 const initialQuote: QuoteDraft = {
   patientName: "",
@@ -20,10 +21,22 @@ const initialQuote: QuoteDraft = {
   customNotes: ""
 };
 
+async function fetchSavedQuotes(): Promise<SavedQuote[]> {
+  const response = await fetch("/api/quotes");
+
+  if (!response.ok) {
+    throw new Error("Unable to load quotes.");
+  }
+
+  const data = (await response.json()) as { quotes: SavedQuote[] };
+  return data.quotes;
+}
+
 export default function Home() {
   const [services, setServices] = useState<ServiceTemplate[]>([]);
   const [selectedServiceId, setSelectedServiceId] = useState("");
   const [quote, setQuote] = useState<QuoteDraft>(initialQuote);
+  const [savedQuotes, setSavedQuotes] = useState<SavedQuote[]>([]);
   const [datePrepared, setDatePrepared] = useState("");
   const [saveStatus, setSaveStatus] = useState("");
   const [isSavingPdf, setIsSavingPdf] = useState(false);
@@ -37,14 +50,20 @@ export default function Home() {
       }).format(new Date())
     );
 
-    async function loadServices() {
-      const response = await fetch("/api/services");
-      const data = (await response.json()) as { services: ServiceTemplate[] };
+    async function loadWorkspaceData() {
+      const [servicesResponse, quotes] = await Promise.all([fetch("/api/services"), fetchSavedQuotes()]);
+
+      if (!servicesResponse.ok) {
+        throw new Error("Unable to load services.");
+      }
+
+      const data = (await servicesResponse.json()) as { services: ServiceTemplate[] };
       setServices(data.services);
+      setSavedQuotes(quotes);
       setSelectedServiceId(data.services[1]?.id || data.services[0]?.id || "");
     }
 
-    loadServices().catch(() => setSaveStatus("Unable to load services. Please refresh the page."));
+    loadWorkspaceData().catch(() => setSaveStatus("Unable to load workspace data. Please refresh the page."));
   }, []);
 
   const selectedService = useMemo(
@@ -57,21 +76,52 @@ export default function Home() {
     : 0;
   const remainingBalance = calculateBalance(finalPackagePrice, quote.downPayment);
 
-  async function saveQuote() {
+  async function loadSavedQuotes() {
+    try {
+      setSavedQuotes(await fetchSavedQuotes());
+      setSaveStatus("Quote history refreshed.");
+    } catch {
+      setSaveStatus("Quote history could not be refreshed.");
+    }
+  }
+
+  async function saveQuote(): Promise<boolean> {
     if (!selectedService) {
-      return;
+      return false;
     }
 
-    const response = await fetch("/api/quotes", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        serviceId: selectedService.id,
-        ...quote
-      })
-    });
+    try {
+      const response = await fetch("/api/quotes", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          serviceId: selectedService.id,
+          ...quote
+        })
+      });
 
-    setSaveStatus(response.ok ? "Quote record saved for this session." : "Quote could not be saved.");
+      if (!response.ok) {
+        setSaveStatus("Quote could not be saved.");
+        return false;
+      }
+
+      const data = (await response.json()) as { quote: SavedQuote };
+      setSavedQuotes((currentQuotes) => [
+        data.quote,
+        ...currentQuotes.filter((currentQuote) => currentQuote.id !== data.quote.id)
+      ]);
+      setSaveStatus("Quote record saved for this session.");
+      return true;
+    } catch {
+      setSaveStatus("Quote could not be saved.");
+      return false;
+    }
+  }
+
+  function loadQuoteIntoForm(savedQuote: SavedQuote) {
+    setSelectedServiceId(savedQuote.serviceId);
+    setQuote(quoteDraftFromSavedQuote(savedQuote));
+    setSaveStatus("Saved quote loaded into the builder.");
   }
 
   async function handleSavePdf() {
@@ -83,9 +133,9 @@ export default function Home() {
     setSaveStatus("");
 
     try {
-      await saveQuote();
+      const wasRecordSaved = await saveQuote();
       await saveQuoteAsOnePagePdf(quote, selectedService.name);
-      setSaveStatus("PDF saved as a one-page A4 file.");
+      setSaveStatus(wasRecordSaved ? "PDF saved as a one-page A4 file." : "PDF saved, but the quote record was not saved.");
     } catch {
       setSaveStatus("PDF could not be created. Please try Print as a fallback.");
     } finally {
@@ -135,6 +185,13 @@ export default function Home() {
               <ConditionalItemsChecklist items={selectedService.conditionalItems} />
             </div>
           </div>
+
+          <QuoteHistory
+            quotes={savedQuotes}
+            services={services}
+            onRefresh={loadSavedQuotes}
+            onLoadQuote={loadQuoteIntoForm}
+          />
 
           <PrintableQuote
             service={selectedService}

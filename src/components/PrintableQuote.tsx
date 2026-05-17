@@ -27,13 +27,13 @@ export function PrintableQuote({
       id="printable-quote-sheet"
       className="print-sheet rounded-[28px] border border-clinic-line bg-white p-6 shadow-soft lg:p-8"
     >
-      <header className="flex items-start justify-between gap-5 border-b border-clinic-line pb-5">
-        <div>
-          <Image src="/assets/yoo-logo.svg" alt="YOO Clinic" width={138} height={69} className="h-auto w-32" priority />
+      <header className="quote-header grid gap-4 border-b border-clinic-line pb-5 sm:grid-cols-[1fr_auto] sm:items-start">
+        <div className="min-w-0">
+          <Image src="/assets/yoo-logo.png" alt="YOO Clinic" width={160} height={80} className="quote-logo h-auto w-32" priority />
           <h1 className="mt-4 text-2xl font-semibold tracking-tight text-clinic-ink">Procedure Quotation Sheet</h1>
           <p className="mt-1 text-sm text-clinic-muted">YOO Plastic Surgery and Aesthetics Clinic</p>
         </div>
-        <div className="rounded-2xl bg-clinic-soft px-4 py-3 text-right">
+        <div className="quote-date rounded-2xl bg-clinic-soft px-4 py-3 text-right">
           <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-clinic-teal">Date prepared</p>
           <p className="mt-1 text-sm font-semibold text-clinic-ink">{datePrepared}</p>
         </div>
