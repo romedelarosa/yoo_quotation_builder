@@ -32,10 +32,15 @@ textarea {
   display: none;
 }
 
+.quote-document {
+  font-variant-numeric: tabular-nums;
+}
+
 .pdf-export-mode {
-  width: 960px !important;
+  width: 860px !important;
   border-radius: 0 !important;
   box-shadow: none !important;
+  padding: 28px !important;
 }
 
 .pdf-export-mode .quote-header {
@@ -43,7 +48,7 @@ textarea {
 }
 
 .pdf-export-mode .quote-logo {
-  width: 118px !important;
+  width: 210px !important;
 }
 
 .pdf-export-mode .quote-date {
@@ -60,9 +65,16 @@ textarea {
   line-height: 1.2 !important;
 }
 
+.pdf-export-mode p,
+.pdf-export-mode li,
+.pdf-export-mode span,
+.pdf-export-mode strong {
+  line-height: 1.35 !important;
+}
+
 .pdf-export-mode section,
 .pdf-export-mode .grid {
-  row-gap: 10px !important;
+  row-gap: 8px !important;
 }
 
 @page {
@@ -101,6 +113,10 @@ textarea {
     border-radius: 0 !important;
     box-shadow: none !important;
     padding: 0 !important;
+  }
+
+  .quote-logo {
+    width: 54mm !important;
   }
 
   .avoid-break {
