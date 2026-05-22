@@ -24,7 +24,8 @@ export function PrintableQuote({
       <header className="quote-header grid gap-4 border-b-2 border-[#111827] pb-4 sm:grid-cols-[1fr_auto] sm:items-start">
         <div className="min-w-0">
           <p className="quote-wordmark text-xl font-extrabold leading-tight text-clinic-teal">
-            YOO Plastic Surgery & Aesthetics Clinic
+            <span className="block">YOO Plastic Surgery &</span>
+            <span className="block">Aesthetics Clinic</span>
           </p>
           <p className="mt-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-[#66727d]">
             Patient quotation record
