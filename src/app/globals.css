@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&display=swap");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -36,6 +38,11 @@ textarea {
   font-variant-numeric: tabular-nums;
 }
 
+.quote-wordmark {
+  font-family: "Montserrat", Arial, sans-serif;
+  max-width: 360px;
+}
+
 .pdf-export-mode {
   width: 860px !important;
   border-radius: 0 !important;
@@ -47,8 +54,9 @@ textarea {
   grid-template-columns: minmax(0, 1fr) auto !important;
 }
 
-.pdf-export-mode .quote-logo {
-  width: 150px !important;
+.pdf-export-mode .quote-wordmark {
+  max-width: 320px !important;
+  font-size: 18px !important;
 }
 
 .pdf-export-mode .quote-date {
@@ -115,8 +123,9 @@ textarea {
     padding: 0 !important;
   }
 
-  .quote-logo {
-    width: 38mm !important;
+  .quote-wordmark {
+    max-width: 82mm !important;
+    font-size: 13pt !important;
   }
 
   .avoid-break {

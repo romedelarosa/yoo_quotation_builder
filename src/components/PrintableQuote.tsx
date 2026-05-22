@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { formatCurrencyPHP } from "@/lib/currency";
 import type { QuoteDraft, ServiceTemplate } from "@/types/quote";
 
@@ -24,14 +23,9 @@ export function PrintableQuote({
     >
       <header className="quote-header grid gap-4 border-b-2 border-[#111827] pb-4 sm:grid-cols-[1fr_auto] sm:items-start">
         <div className="min-w-0">
-          <Image
-            src="/assets/yoo-logo-turquoise-transparent.png"
-            alt="YOO Plastic Surgery and Aesthetics Clinic"
-            width={320}
-            height={80}
-            className="quote-logo h-auto w-40"
-            priority
-          />
+          <p className="quote-wordmark text-xl font-extrabold leading-tight text-clinic-teal">
+            YOO Plastic Surgery & Aesthetics Clinic
+          </p>
           <p className="mt-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-[#66727d]">
             Patient quotation record
           </p>
