@@ -12,27 +12,25 @@ function safeFilePart(value: string): string {
     .toLowerCase();
 }
 
-function preserveVisibleSpacesForCanvas(element: HTMLElement): () => void {
-  const originalTextNodes: Array<{ node: Text; value: string }> = [];
-  const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT);
+function preserveVisibleSpacesForCanvasClone(clonedDocument: Document): void {
+  const element = clonedDocument.getElementById("printable-quote-sheet");
+
+  if (!element) {
+    return;
+  }
+
+  const walker = clonedDocument.createTreeWalker(element, NodeFilter.SHOW_TEXT);
   let currentNode = walker.nextNode();
 
   while (currentNode) {
     const textNode = currentNode as Text;
 
     if (textNode.nodeValue?.includes(" ")) {
-      originalTextNodes.push({ node: textNode, value: textNode.nodeValue });
-      textNode.nodeValue = textNode.nodeValue.replace(/ /g, " \u200a");
+      textNode.nodeValue = textNode.nodeValue.replace(/ /g, " \u00a0");
     }
 
     currentNode = walker.nextNode();
   }
-
-  return () => {
-    originalTextNodes.forEach(({ node, value }) => {
-      node.nodeValue = value;
-    });
-  };
 }
 
 export async function saveQuoteAsOnePagePdf(quote: QuoteDraft, serviceName: string): Promise<void> {
@@ -47,7 +45,6 @@ export async function saveQuoteAsOnePagePdf(quote: QuoteDraft, serviceName: stri
 
   await document.fonts.ready;
   element.classList.add("pdf-export-mode");
-  const restoreSpaces = preserveVisibleSpacesForCanvas(element);
   await new Promise((resolve) => requestAnimationFrame(resolve));
 
   let canvas: HTMLCanvasElement;
@@ -55,12 +52,12 @@ export async function saveQuoteAsOnePagePdf(quote: QuoteDraft, serviceName: stri
   try {
     canvas = await html2canvas(element, {
       backgroundColor: "#ffffff",
-      scale: 2,
+      scale: 3,
       useCORS: true,
-      windowWidth: Math.max(element.scrollWidth, 960)
+      windowWidth: Math.max(element.scrollWidth, 960),
+      onclone: preserveVisibleSpacesForCanvasClone
     });
   } finally {
-    restoreSpaces();
     element.classList.remove("pdf-export-mode");
   }
 

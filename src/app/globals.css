@@ -55,9 +55,17 @@ textarea {
   grid-template-columns: minmax(0, 1fr) auto !important;
 }
 
+.pdf-export-mode,
+.pdf-export-mode * {
+  letter-spacing: 0.01em !important;
+  text-rendering: geometricPrecision !important;
+  word-spacing: 0.18em !important;
+}
+
 .pdf-export-mode .quote-wordmark {
   max-width: 320px !important;
   font-size: 18px !important;
+  word-spacing: 0.04em !important;
 }
 
 .pdf-export-mode .quote-date {
