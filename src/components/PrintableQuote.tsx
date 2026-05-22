@@ -9,6 +9,9 @@ type PrintableQuoteProps = {
   datePrepared: string;
 };
 
+const downPaymentTerms =
+  "The downpayment is subject to YOO Clinic's Term's & Conditions. Except in special cases allowed by the Terms & Conditions, it is generally non-refundable as it is primarily used to secure the availability of the Doctor, Surgical team, Staff, Clinic space, acquisition of the materials and resources to be used, and the date & time of the Doctor/s involved.";
+
 export function PrintableQuote({
   service,
   quote,
@@ -53,6 +56,15 @@ export function PrintableQuote({
         </div>
       </section>
 
+      {quote.serviceScope ? (
+        <section className="avoid-break mt-3">
+          <SectionTitle title="Service scope" />
+          <p className="border-x border-b border-[#111827] px-3 py-2 text-[10px] leading-4 text-[#111827]">
+            {quote.serviceScope}
+          </p>
+        </section>
+      ) : null}
+
       <section className="avoid-break mt-4 grid border border-[#111827] text-xs md:grid-cols-3">
         <PriceBlock label="Regular package price" value={formatCurrencyPHP(service.regularPrice)} />
         <PriceBlock
@@ -72,6 +84,9 @@ export function PrintableQuote({
             <span className="px-3 py-2 text-[#4b5563]">Down payment</span>
             <strong className="border-l border-[#111827] px-3 py-2 text-right">{formatCurrencyPHP(quote.downPayment)}</strong>
           </div>
+          <p className="border-b border-[#111827] px-3 py-2 text-[9px] italic leading-4 text-[#4b5563]">
+            {downPaymentTerms}
+          </p>
           <div className="grid grid-cols-[1fr_140px]">
             <span className="px-3 py-2 text-[#4b5563]">Remaining balance</span>
             <strong className="border-l border-[#111827] px-3 py-2 text-right">{formatCurrencyPHP(remainingBalance)}</strong>

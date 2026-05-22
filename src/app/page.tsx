@@ -18,6 +18,7 @@ const initialQuote: QuoteDraft = {
   discountLabel: "Courtesy adjustment",
   downPayment: 0,
   quoteValidity: "Valid for 14 days from date prepared",
+  serviceScope: "",
   customNotes: ""
 };
 

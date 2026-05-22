@@ -67,6 +67,16 @@ export function QuoteForm({
           />
         </div>
         <label className="block">
+          <span className="text-sm font-semibold text-clinic-ink">Service scope</span>
+          <textarea
+            value={quote.serviceScope}
+            onChange={(event) => update("serviceScope", event.target.value)}
+            rows={2}
+            className="mt-2 w-full resize-none rounded-2xl border border-clinic-line px-4 py-3 text-sm outline-none transition focus:border-clinic-teal focus:ring-4 focus:ring-clinic-soft"
+            placeholder="Briefly define the agreed service scope."
+          />
+        </label>
+        <label className="block">
           <span className="text-sm font-semibold text-clinic-ink">Optional custom notes</span>
           <textarea
             value={quote.customNotes}

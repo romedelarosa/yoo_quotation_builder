@@ -177,6 +177,7 @@ export function quoteDraftFromSavedQuote(quote: SavedQuote): QuoteDraft {
     discountLabel: quote.discountLabel,
     downPayment: quote.downPayment,
     quoteValidity: quote.quoteValidity,
+    serviceScope: quote.serviceScope || "",
     customNotes: quote.customNotes
   };
 }

@@ -16,6 +16,7 @@ export async function POST(request: Request) {
     discountLabel?: string;
     downPayment?: number;
     quoteValidity?: string;
+    serviceScope?: string;
     customNotes?: string;
   };
 
@@ -38,6 +39,7 @@ export async function POST(request: Request) {
     discountLabel: body.discountLabel || "Courtesy adjustment",
     downPayment,
     quoteValidity: body.quoteValidity || "",
+    serviceScope: body.serviceScope || "",
     customNotes: body.customNotes || "",
     finalPackagePrice,
     remainingBalance

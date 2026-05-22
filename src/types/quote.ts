@@ -22,6 +22,7 @@ export type QuoteDraft = {
   discountLabel: string;
   downPayment: number;
   quoteValidity: string;
+  serviceScope: string;
   customNotes: string;
 };
 
