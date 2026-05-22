@@ -48,7 +48,7 @@ textarea {
 }
 
 .pdf-export-mode .quote-logo {
-  width: 210px !important;
+  width: 150px !important;
 }
 
 .pdf-export-mode .quote-date {
@@ -116,7 +116,7 @@ textarea {
   }
 
   .quote-logo {
-    width: 54mm !important;
+    width: 38mm !important;
   }
 
   .avoid-break {

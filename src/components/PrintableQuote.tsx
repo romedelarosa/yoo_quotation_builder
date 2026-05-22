@@ -29,7 +29,7 @@ export function PrintableQuote({
             alt="YOO Plastic Surgery and Aesthetics Clinic"
             width={320}
             height={80}
-            className="quote-logo h-auto w-56"
+            className="quote-logo h-auto w-40"
             priority
           />
           <p className="mt-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-[#66727d]">
